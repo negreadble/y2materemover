@@ -1,0 +1,32 @@
+import os
+
+def clean_filenames(directory, words_to_remove):
+    for filename in os.listdir(directory):
+        original_path = os.path.join(directory, filename)
+        
+        # Skip directories and only process files
+        if not os.path.isfile(original_path):
+            continue
+        
+        new_name = filename
+        for word in words_to_remove:
+            # Split and rejoin to remove the word
+            new_name = ''.join(new_name.split(word))
+        
+        # Remove leading/trailing separators
+        new_name = new_name.strip(' -_.')
+        
+        # Skip if the name didn't change or became empty
+        if not new_name or new_name == filename:
+            continue
+        
+        new_path = os.path.join(directory, new_name)
+        os.rename(original_path, new_path)
+        print(f"Renamed '{filename}' to '{new_name}'")
+
+# Example usage
+if __name__ == "__main__":
+    target_directory = "/path/to/your/files"  # Replace with your directory path
+    remove_words = ["y2mate.com"]             # Words to remove ,can change to your taste 
+    
+    clean_filenames(target_directory, remove_words)
